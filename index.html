@@ -49,8 +49,24 @@
   }
   .nav-cta:hover { background: var(--blue); color: #fff; }
   @media (max-width: 720px) {
+    .wrap { padding: 0 16px; }
     .nav-links { display: none; }
-    .nav-cta { padding: 6px 12px; font-size: 12.5px; } /* 缩窄一点，保证两个按钮都放得下 */
+    .nav-in { height: 54px; }
+    .brand { font-size: 15px; gap: 8px; }
+    .brand .mark { width: 26px; height: 26px; font-size: 13px; border-radius: 7px; }
+    .brand small { display: none; }           /* 窄屏隐藏副标题，给下载按钮腾位置 */
+    .nav-cta-group { gap: 8px; }
+    .nav-cta { padding: 6px 11px; font-size: 12.5px; }
+    /* 手机浏览器地址栏会伸缩，用 svh 更稳（老浏览器自动回退 vh） */
+    .hero { min-height: calc(100vh - 55px); min-height: calc(100svh - 55px); padding: 20px 0; }
+    .carousel { min-height: calc(100vh - 55px); min-height: calc(100svh - 55px); padding: 16px 0; }
+    /* 竖屏下截图框改竖版 3:4，手机/平板截图显示更大 */
+    .car-frame { aspect-ratio: 3 / 4; width: min(100%, calc((100vh - 150px) * 3 / 4)); width: min(100%, calc((100svh - 150px) * 3 / 4)); }
+    .car-btn { width: 34px; height: 34px; font-size: 15px; }
+    .car-btn.prev { left: 8px; }
+    .car-btn.next { right: 8px; }
+    .car-dots { margin-top: 10px; }
+    .donate { min-height: auto; padding: 44px 0; }  /* 手机上不强制占一屏，自然排布 */
   }
 
   /* ===== 首屏：独占一屏 ===== */
