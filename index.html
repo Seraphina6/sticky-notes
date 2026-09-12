@@ -48,26 +48,6 @@
     transition: all .2s;
   }
   .nav-cta:hover { background: var(--blue); color: #fff; }
-  @media (max-width: 720px) {
-    .wrap { padding: 0 16px; }
-    .nav-links { display: none; }
-    .nav-in { height: 54px; }
-    .brand { font-size: 15px; gap: 8px; }
-    .brand .mark { width: 26px; height: 26px; font-size: 13px; border-radius: 7px; }
-    .brand small { display: none; }           /* 窄屏隐藏副标题，给下载按钮腾位置 */
-    .nav-cta-group { gap: 8px; }
-    .nav-cta { padding: 6px 11px; font-size: 12.5px; }
-    /* 手机浏览器地址栏会伸缩，用 svh 更稳（老浏览器自动回退 vh） */
-    .hero { min-height: calc(100vh - 55px); min-height: calc(100svh - 55px); padding: 20px 0; }
-    .carousel { min-height: calc(100vh - 55px); min-height: calc(100svh - 55px); padding: 16px 0; }
-    /* 竖屏下截图框改竖版 3:4，手机/平板截图显示更大 */
-    .car-frame { aspect-ratio: 3 / 4; width: min(100%, calc((100vh - 150px) * 3 / 4)); width: min(100%, calc((100svh - 150px) * 3 / 4)); }
-    .car-btn { width: 34px; height: 34px; font-size: 15px; }
-    .car-btn.prev { left: 8px; }
-    .car-btn.next { right: 8px; }
-    .car-dots { margin-top: 10px; }
-    .donate { min-height: auto; padding: 44px 0; }  /* 手机上不强制占一屏，自然排布 */
-  }
 
   /* ===== 首屏：独占一屏 ===== */
   .hero {
@@ -182,6 +162,47 @@
   footer { padding: 36px 0; border-top: 1px solid var(--line); text-align: center; font-size: 13.5px; color: var(--ink-3); }
   footer a { color: var(--ink-2); margin: 0 12px; }
   footer a:hover { color: var(--blue); }
+
+  /* ===== 手机 / 平板适配（必须放在所有基础规则之后，否则会被覆盖） ===== */
+  @media (max-width: 720px) {
+    .wrap { padding: 0 16px; }
+    .nav-links { display: none; }
+    .nav-in { height: 54px; }
+    .brand { font-size: 15px; gap: 8px; }
+    .brand .mark { width: 26px; height: 26px; font-size: 13px; border-radius: 7px; }
+    .brand small { display: none; }           /* 窄屏隐藏副标题，给下载按钮腾位置 */
+    .nav-cta-group { gap: 8px; }
+    .nav-cta { padding: 6px 11px; font-size: 12.5px; }
+    /* 手机上不强制每段占一整屏，避免大片空白，高度跟随内容 */
+    .hero { min-height: auto; padding: 36px 0 28px; }
+    .carousel { min-height: auto; padding: 24px 0; }
+    /* 竖屏下截图框改竖版 3:4，手机/平板截图显示更大；svh 应对地址栏伸缩 */
+    .car-frame { aspect-ratio: 3 / 4; width: min(100%, calc((100vh - 150px) * 3 / 4)); width: min(100%, calc((100svh - 150px) * 3 / 4)); }
+    .car-btn { width: 34px; height: 34px; font-size: 15px; }
+    .car-btn.prev { left: 8px; }
+    .car-btn.next { right: 8px; }
+    .car-dots { margin-top: 10px; gap: 8px; }
+    .donate { min-height: auto; padding: 44px 0; }  /* 手机上不强制占一屏，自然排布 */
+    .hero p.sub { font-size: 14px; }
+    .hero .sub br, .donate p br { display: none; }   /* 窄屏取消强制换行，避免文字排得乱 */
+    .car-frame { box-shadow: 0 12px 32px rgba(15,23,42,.10); }
+    .car-tag { font-size: 11px; right: 8px; bottom: 8px; padding: 3px 10px; }
+    .qr { padding: 8px; border-radius: 12px; box-shadow: 0 8px 24px rgba(15,23,42,.08); }
+    footer { padding: 24px 0; font-size: 12.5px; }
+    footer a { margin: 0 8px; }
+  }
+
+  /* 触屏设备没有 hover：箭头默认就亮一些，方便点按 */
+  @media (hover: none) {
+    .car-btn { opacity: .55; }
+  }
+
+  /* 平板（720~1024px）：同样不强制每段占满一屏，减少空白 */
+  @media (min-width: 721px) and (max-width: 1024px) {
+    .hero { min-height: auto; padding: 56px 0 40px; }
+    .carousel { min-height: auto; padding: 32px 0; }
+    .donate { min-height: auto; padding: 48px 0; }
+  }
 </style>
 </head>
 <body data-page-node-id="YgzTKLXrpLJRlYCfm1Dwf0">
