@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="gkRrZYa3AKCRiS6bpYIZzr">
+<head data-page-node-id="QP1YEbukHdvrNBRyYL697Q">
+<meta charset="UTF-8" data-page-node-id="4JSOZ0z6gLo0NgDpIPh311">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="fQ4mp1Nv7BWIlAeQ1VOFOE">
+<title>便签 Sticky Notes — 免费 · 无广告 · 全端自适应</title>
+<style>
+  :root {
+    --blue: #2563eb;
+    --ink: #0f172a;
+    --ink-2: #334155;
+    --ink-3: #64748b;
+    --line: #e5e7eb;
+    --paper: #ffffff;
+    --paper-2: #f6f7f9;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: var(--ink); background: var(--paper); line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { text-decoration: none; color: inherit; }
+  img { max-width: 100%; display: block; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+
+  /* ===== 导航 ===== */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,.85); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-in { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16.5px; letter-spacing: .3px; }
+  .brand .mark {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: linear-gradient(140deg, #3b82f6, #1d4ed8);
+    color: #fff; display: grid; place-items: center; font-size: 15px;
+  }
+  .brand small { color: var(--ink-3); font-weight: 500; font-size: 12.5px; margin-left: 2px; }
+  .nav-links { display: flex; gap: 26px; font-size: 14px; color: var(--ink-2); }
+  .nav-links a:hover { color: var(--blue); }
+  .nav-cta-group { display: flex; gap: 10px; }
+  .nav-cta {
+    font-size: 13.5px; font-weight: 600; color: var(--blue);
+    border: 1.5px solid var(--blue); border-radius: 999px; padding: 6px 18px;
+    transition: all .2s;
+  }
+  .nav-cta:hover { background: var(--blue); color: #fff; }
+  @media (max-width: 720px) {
+    .nav-links { display: none; }
+    .nav-cta { padding: 6px 12px; font-size: 12.5px; } /* 缩窄一点，保证两个按钮都放得下 */
+  }
+
+  /* ===== 首屏：独占一屏 ===== */
+  .hero {
+    text-align: center; padding: 30px 0;
+    min-height: calc(100vh - 61px);
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .hero .wrap { width: 100%; }
+  .hero h1 {
+    font-size: clamp(26px, 3.4vw, 42px); font-weight: 800;
+    letter-spacing: -.5px; line-height: 1.3; margin-bottom: 14px;
+  }
+  .hero h1 em { font-style: normal; color: var(--blue); }
+  .hero p.sub {
+    font-size: clamp(14px, 1.6vw, 16.5px); color: var(--ink-3);
+    margin: 0 auto 28px;
+  }
+  .btn {
+    display: inline-block; padding: 12px 36px; border-radius: 999px;
+    font-size: 15px; font-weight: 700; color: #fff;
+    background: var(--blue); box-shadow: 0 6px 20px rgba(37,99,235,.3);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(37,99,235,.4); }
+  .btn-group { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn.alt {
+    background: var(--ink); box-shadow: 0 6px 20px rgba(15,23,42,.25);
+  }
+  .btn.alt:hover { box-shadow: 0 10px 26px rgba(15,23,42,.35); }
+
+  /* ===== 轮播：独占一屏 ===== */
+  .carousel {
+    padding: 30px 0;
+    min-height: calc(100vh - 61px);
+    display: flex; align-items: center;
+  }
+  .carousel .wrap { width: 100%; }
+  .car-frame {
+    position: relative; border-radius: 18px; overflow: hidden;
+    border: 1px solid var(--line);
+    box-shadow: 0 24px 70px rgba(15,23,42,.12);
+    background: var(--paper-2);
+    aspect-ratio: 16 / 9;
+    /* 不超过一屏可用高度（预留空间尽量小，让图更大） */
+    width: min(100%, calc((100vh - 120px) * 16 / 9));
+    margin: 0 auto;
+  }
+  .car-track { display: flex; height: 100%; transition: transform .55s cubic-bezier(.22,.61,.36,1); }
+  .car-slide {
+    min-width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;   /* 让每张图的标签定位到自己这一张上 */
+  }
+  .car-slide img {
+    max-width: 100%; max-height: 100%;
+    width: auto; height: auto; object-fit: contain;   /* 竖图按高度自适应铺满，横图按宽度铺满，均不裁切不失真 */
+    background: var(--paper-2);
+  }
+  .car-btn {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 42px; height: 42px; border-radius: 50%;
+    background: rgba(255,255,255,.92); border: 1px solid var(--line);
+    color: var(--ink); font-size: 18px; cursor: pointer;
+    display: grid; place-items: center;
+    box-shadow: 0 4px 14px rgba(15,23,42,.12);
+    transition: background .2s, opacity .3s;
+    opacity: .25;              /* 默认淡化，不干扰看图 */
+    user-select: none;
+  }
+  .car-btn:hover, .car-frame:hover .car-btn { background: #fff; opacity: 1; }
+  .car-btn.prev { left: 14px; }
+  .car-btn.next { right: 14px; }
+  /* 每张图右下角的轻量标题，不遮挡内容 */
+  .car-tag {
+    position: absolute; right: 14px; bottom: 12px;
+    padding: 4px 14px; border-radius: 999px;
+    background: rgba(255,255,255,.88); backdrop-filter: blur(6px);
+    border: 1px solid rgba(229,231,235,.9);
+    font-size: 12.5px; font-weight: 600; color: var(--ink-2);
+    box-shadow: 0 2px 8px rgba(15,23,42,.08);
+  }
+  .car-dots { display: flex; gap: 9px; justify-content: center; margin-top: 14px; }
+  .car-dot {
+    width: 8px; height: 8px; border-radius: 999px;
+    background: #cbd5e1; cursor: pointer; transition: all .3s;
+  }
+  .car-dot.on { width: 26px; background: var(--blue); }
+
+  /* ===== 打赏：独占一屏，内容缩放保证不超出 ===== */
+  .donate {
+    padding: 20px 0; border-top: 1px solid var(--line); background: var(--paper);
+    min-height: calc(100vh - 61px);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .donate-in { max-width: 700px; text-align: center; }
+  .donate .kicker { font-size: 12px; font-weight: 700; letter-spacing: 4px; color: var(--ink-3); margin-bottom: 10px; }
+  .donate h2 { font-size: clamp(22px, 2.6vw, 30px); font-weight: 800; letter-spacing: -.3px; margin-bottom: 12px; }
+  .donate p.copy { font-size: 14.5px; color: var(--ink-2); margin-bottom: 8px; }
+  .donate p.copy-sub { font-size: 13px; color: var(--ink-3); margin-bottom: 22px; }
+  .qr {
+    display: inline-block; padding: 12px; border-radius: 16px;
+    background: #fff; border: 1px solid var(--line);
+    box-shadow: 0 12px 40px rgba(15,23,42,.1);
+  }
+  .qr img {
+    /* 固定 600px，保证能扫；小屏时按屏宽收缩 */
+    width: min(600px, 92vw); border-radius: 8px;
+  }
+  .qr-cap { margin-top: 14px; font-size: 13px; color: var(--ink-3); }
+
+  /* ===== 页脚 ===== */
+  footer { padding: 36px 0; border-top: 1px solid var(--line); text-align: center; font-size: 13.5px; color: var(--ink-3); }
+  footer a { color: var(--ink-2); margin: 0 12px; }
+  footer a:hover { color: var(--blue); }
+</style>
+</head>
+<body data-page-node-id="YgzTKLXrpLJRlYCfm1Dwf0">
+
+<nav data-page-node-id="4qleQwCz1OrtyVxy79EICu">
+  <div class="wrap nav-in" data-page-node-id="eP1qC8N09skhEwHxtlicfj">
+    <div class="brand" data-page-node-id="l7NfAGPGbpdmNAcmt2rRmD"><span class="mark" data-page-node-id="sL7iz48tmHFDU3o2hbmHex">📝</span>便签<small data-page-node-id="n1pZaTiqnuqRtCjTqXG8kK">Sticky Notes</small></div>
+    <div class="nav-links" data-page-node-id="KBiIs5AWpJPHr5K417vywt">
+      <a href="#shots" data-page-node-id="eZXtiiFf7R765H3hvR0UFv">应用截图</a>
+      <a href="#donate" data-page-node-id="Wx1U89FPsMngdB0MlAytGl">打赏支持</a>
+      <a href="https://github.com/Seraphina6/sticky-notes" target="_blank" data-page-node-id="D7ZUYS00E9LW4z0kNcvqC6">GitHub</a>
+    </div>
+    <div class="nav-cta-group">
+      <a class="nav-cta" href="https://github.com/Seraphina6/sticky-notes/releases/download/v1.0.0/bianqian_computer.exe" download data-page-node-id="vkIYgdfO24p0RG6zm9hNRQ">⬇ 电脑版</a>
+      <a class="nav-cta" href="https://github.com/Seraphina6/sticky-notes/releases/download/v1.0.0/bianqian_mobile.apk" download>⬇ 移动端版</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" data-page-node-id="o6jQLCC7rDtVYhF722Qi0T">
+  <div class="wrap" data-page-node-id="EggOiuJ1toMHJ2af4NiOdA">
+    <h1 data-page-node-id="aMZJkFPCrq4pJxwJ1Zecd3">手机 · 平板 · 电脑<em data-page-node-id="7hWkAdaAhUTjE2DvOeiP8x">全适配</em></h1>
+    <p class="sub" data-page-node-id="IeAKXJRoiFxB79Vz94XIX0">免费、无广告、无会员、不限数量。<br data-page-node-id="de7rFe9XZWFZxfIBxhPDsS">普通便签、待办事项、提醒便签、时间轴四种类型。</p>
+    <p class="sub" style="font-size:13.5px;">右上角选择「电脑版 / 移动端版」即可免费下载</p>
+  </div>
+</header>
+
+<section class="carousel" id="shots" data-page-node-id="GhQBJrP2WxU9uoW4CAI89t">
+  <div class="wrap" data-page-node-id="kyHLInETApDcJsw6qCUL6J">
+    <div class="car-frame" data-page-node-id="RjbHMjA2kmx11BqOeooYQh">
+      <div class="car-track" id="carTrack" data-page-node-id="o86nMRXDnhbBsXUGUigzrf">
+        <div class="car-slide" data-page-node-id="rrII8NDuhB4lWr1bVsFr6e"><img src="test/电脑全屏.png" alt="电脑全屏" data-page-node-id="2Ewoq51JrTix1toSpIQbu9"><span class="car-tag">电脑全屏</span></div>
+        <div class="car-slide" data-page-node-id="HBfw5RALU3FBui3uYW4YCn"><img src="test/电脑小屏幕.png" alt="电脑小屏幕" data-page-node-id="pBd0TmwSKmOD474kZQIiuN"><span class="car-tag">电脑小屏幕</span></div>
+        <div class="car-slide" data-page-node-id="WgBn2McT8qWr8aVZfbqiEp"><img src="test/pad.png" alt="pad" data-page-node-id="drdI2MXlEvKTBrwXuGuvBG"><span class="car-tag">pad</span></div>
+        <div class="car-slide" data-page-node-id="XeDXxYThkPeoTRGRqqm6JW"><img src="test/iPhone 12Pro.png" alt="iPhone 12Pro" data-page-node-id="acWs2Hx61xUwW8H7mXfKGw"><span class="car-tag">iPhone 12Pro</span></div>
+        <div class="car-slide" data-page-node-id="oEZIvEx528WBNi2nCUyDlr"><img src="test/新建便签.png" alt="新建便签" data-page-node-id="Vwx5BXn1Tm4pfUK6AsgGb4"><span class="car-tag">新建便签</span></div>
+      </div>
+      <button class="car-btn prev" id="carPrev" aria-label="上一张" data-page-node-id="x38U5YFMshIDvY7a06wjIX">‹</button>
+      <button class="car-btn next" id="carNext" aria-label="下一张" data-page-node-id="OOYW7xq2n6AaD0bCm2KFKE">›</button>
+    </div>
+    <div class="car-dots" id="carDots" data-page-node-id="XhnnuJADrqAdw4BxDtU6UO"></div>
+  </div>
+</section>
+
+<section class="donate" id="donate" data-page-node-id="78j15lNJKe2furocBBp5FC">
+  <div class="wrap donate-in" data-page-node-id="axSY3XpP622E9jB0erer2z">
+    <div class="kicker" data-page-node-id="zgEehaA7mIP5Cv8hJWSiNg">SUPPORT</div>
+    <h2 data-page-node-id="GzGf2xdV3qdPX9EBDe5E4u">打赏支持</h2>
+    <p class="copy" data-page-node-id="mGPaSOZFV9MY6qVRH6nDrs">这个便签没有广告，不收会员费，也不限制数量。<br data-page-node-id="ANksyJwYnM9FyHdjB8OO01">开发和维护都是业余时间在做，全凭一股热情。</p>
+    <p class="copy-sub" data-page-node-id="hTJjHndW6QopDflcZzTet1">如果它帮你记住了重要的事、省下了一点找工具的时间，<br data-page-node-id="1MPenGo9jaGYbAFySQdA1I">欢迎请作者喝杯咖啡——金额随意，心意最珍贵。</p>
+    <div class="qr" data-page-node-id="purlhlUaP0xJ3wRuKS3POe"><img src="88888888.jpg" alt="微信 / 支付宝打赏二维码" data-page-node-id="UgbGIhvhF1bA24Fij7Hv7N"></div>
+    <p class="qr-cap" data-page-node-id="mnzIXT6ZB1sYuzhC8yzOvE">微信 / 支付宝 扫一扫即可打赏</p>
+  </div>
+</section>
+
+<footer data-page-node-id="2bLoYX9QmyG9LRX4k4hJ0K">
+  <div data-page-node-id="bvc5HkvZfMFUS1Hea9ux54">
+    <a href="https://github.com/Seraphina6/sticky-notes" target="_blank" data-page-node-id="aJNCHCVrvcNdpuOznS6PSW">GitHub</a>
+    <a href="https://github.com/Seraphina6/sticky-notes/releases" target="_blank" data-page-node-id="eHA86qW8L4qDFgBy2RS2qB">下载</a>
+  </div>
+  便签 Sticky Notes · 用 AI 打造的极简便签
+</footer>
+
+<script>
+  (function () {
+    var track = document.getElementById('carTrack');
+    var dotsBox = document.getElementById('carDots');
+    var total = track.children.length, i = 0, timer;
+
+    for (var d = 0; d < total; d++) {
+      var dot = document.createElement('span');
+      dot.className = 'car-dot';
+      dot.dataset.i = d;
+      dot.onclick = function () { go(+this.dataset.i); restart(); };
+      dotsBox.appendChild(dot);
+    }
+    var dots = dotsBox.children;
+
+    function go(n) {
+      i = (n + total) % total;
+      track.style.transform = 'translateX(-' + i * 100 + '%)';
+      for (var k = 0; k < total; k++) dots[k].classList.toggle('on', k === i);
+    }
+    function restart() {
+      clearInterval(timer);
+      timer = setInterval(function () { go(i + 1); }, 4500);
+    }
+    document.getElementById('carPrev').onclick = function () { go(i - 1); restart(); };
+    document.getElementById('carNext').onclick = function () { go(i + 1); restart(); };
+
+    // 触摸滑动
+    var sx = null;
+    track.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', function (e) {
+      if (sx === null) return;
+      var dx = e.changedTouches[0].clientX - sx;
+      if (dx > 40) go(i - 1); else if (dx < -40) go(i + 1);
+      sx = null; restart();
+    }, { passive: true });
+
+    go(0); restart();
+  })();
+</script>
+
+</body>
+</html>
